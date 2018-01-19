@@ -20,6 +20,10 @@
             <element id="module-output" name="core" />
           </element>
           <element id="library" level="project" name="Gradle: gdx-1.9.9-SNAPSHOT" />
+          <element id="library" level="project" name="Gradle: kotlin-stdlib-jdk8-1.2.20" />
+          <element id="library" level="project" name="Gradle: kotlin-stdlib-1.2.20" />
+          <element id="library" level="project" name="Gradle: kotlin-stdlib-jdk7-1.2.20" />
+          <element id="library" level="project" name="Gradle: annotations-13.0" />
           <element id="library" level="project" name="Gradle: core.core-1.0" />
           <element id="library" level="project" name="Gradle: gdx-backend-gwt-1.9.9-SNAPSHOT" />
           <element id="library" level="project" name="Gradle: gdx-backend-gwt-1.9.9-SNAPSHOT-sources" />

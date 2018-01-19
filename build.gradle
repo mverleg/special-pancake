@@ -1,6 +1,7 @@
 import groovy.json.JsonSlurper
 
 buildscript {
+    ext.kotlin_version = '1.2.20'
 
     ant.get(src: 'http://libgdx.badlogicgames.com/libgdx-site/service/getVersions?release=false', dest: 'versions.json')
     def versionFile = file('versions.json')
@@ -30,8 +31,10 @@ buildscript {
         classpath "de.richsource.gradle.plugins:gwt-gradle-plugin:$gwtGradleVersion"
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath "com.mobidevelop.robovm:robovm-gradle-plugin:$roboVMGradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+apply plugin: 'kotlin'
 
 allprojects {
     apply plugin: "eclipse"
@@ -54,6 +57,7 @@ project(":core") {
     
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     }
 }
 
@@ -107,10 +111,37 @@ project(":ios") {
     }
 }
 
+allprojects {
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+}
 
 tasks.eclipse.doLast {
 	delete ".project"
 }
 group 'pancake'
 version '0.0.1'
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
 

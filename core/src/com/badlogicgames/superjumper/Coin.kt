@@ -1,34 +1,36 @@
 /*******************************************************************************
  * Copyright 2011 See AUTHORS file.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************/
+ */
 
-package com.badlogicgames.superjumper;
+package com.badlogicgames.superjumper
 
-public class Coin extends GameObject {
-	public static final float COIN_WIDTH = 0.5f;
-	public static final float COIN_HEIGHT = 0.8f;
-	public static final int COIN_SCORE = 10;
+class Coin(x: Float, y: Float): GameObject(x, y, COIN_WIDTH, COIN_HEIGHT) {
 
-	float stateTime;
+    internal var stateTime: Float = 0.toFloat()
 
-	public Coin (float x, float y) {
-		super(x, y, COIN_WIDTH, COIN_HEIGHT);
-		stateTime = 0;
-	}
+    init {
+        stateTime = 0f
+    }
 
-	public void update (float deltaTime) {
-		stateTime += deltaTime;
-	}
+    fun update(deltaTime: Float) {
+        stateTime += deltaTime
+    }
+
+    companion object {
+        val COIN_WIDTH = 0.5f
+        val COIN_HEIGHT = 0.8f
+        val COIN_SCORE = 10
+    }
 }
