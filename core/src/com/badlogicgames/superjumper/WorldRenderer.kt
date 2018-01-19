@@ -20,7 +20,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 
-class WorldRenderer(internal var batch: SpriteBatch, internal var world: World) {
+class WorldRenderer(internal val batch: SpriteBatch, internal val world: World, internal val assets: Assets) {
     internal var cam: OrthographicCamera
 
     init {
@@ -39,7 +39,7 @@ class WorldRenderer(internal var batch: SpriteBatch, internal var world: World) 
     fun renderBackground() {
         batch.disableBlending()
         batch.begin()
-        batch.draw(Assets.backgroundRegion, cam.position.x - FRUSTUM_WIDTH / 2, cam.position.y - FRUSTUM_HEIGHT / 2, FRUSTUM_WIDTH,
+        batch.draw(assets.backgroundRegion, cam.position.x - FRUSTUM_WIDTH / 2, cam.position.y - FRUSTUM_HEIGHT / 2, FRUSTUM_WIDTH,
                 FRUSTUM_HEIGHT)
         batch.end()
     }
@@ -58,10 +58,10 @@ class WorldRenderer(internal var batch: SpriteBatch, internal var world: World) 
     private fun renderBob() {
         val keyFrame: TextureRegion
         when (world.bob.state) {
-            Bob.BOB_STATE_FALL -> keyFrame = Assets.bobFall!!.getKeyFrame(world.bob.stateTime, Animation.ANIMATION_LOOPING)
-            Bob.BOB_STATE_JUMP -> keyFrame = Assets.bobJump!!.getKeyFrame(world.bob.stateTime, Animation.ANIMATION_LOOPING)
-            Bob.BOB_STATE_HIT -> keyFrame = Assets.bobHit!!
-            else -> keyFrame = Assets.bobHit!!
+            Bob.BOB_STATE_FALL -> keyFrame = assets.bobFall.getKeyFrame(world.bob.stateTime, Animation.ANIMATION_LOOPING)
+            Bob.BOB_STATE_JUMP -> keyFrame = assets.bobJump.getKeyFrame(world.bob.stateTime, Animation.ANIMATION_LOOPING)
+            Bob.BOB_STATE_HIT -> keyFrame = assets.bobHit
+            else -> keyFrame = assets.bobHit
         }
 
         val side = (if (world.bob.velocity.x < 0) -1 else 1).toFloat()
@@ -75,9 +75,9 @@ class WorldRenderer(internal var batch: SpriteBatch, internal var world: World) 
         val len = world.platforms.size
         for (i in 0 until len) {
             val platform = world.platforms[i]
-            var keyFrame = Assets.platform
+            var keyFrame = assets.platform
             if (platform.state == Platform.PLATFORM_STATE_PULVERIZING) {
-                keyFrame = Assets.brakingPlatform!!.getKeyFrame(platform.stateTime, Animation.ANIMATION_NONLOOPING)
+                keyFrame = assets.brakingPlatform.getKeyFrame(platform.stateTime, Animation.ANIMATION_NONLOOPING)
             }
 
             batch.draw(keyFrame, platform.position.x - 1, platform.position.y - 0.25f, 2f, 0.5f)
@@ -88,13 +88,13 @@ class WorldRenderer(internal var batch: SpriteBatch, internal var world: World) 
         var len = world.springs.size
         for (i in 0 until len) {
             val spring = world.springs[i]
-            batch.draw(Assets.spring, spring.position.x - 0.5f, spring.position.y - 0.5f, 1f, 1f)
+            batch.draw(assets.spring, spring.position.x - 0.5f, spring.position.y - 0.5f, 1f, 1f)
         }
 
         len = world.coins.size
         for (i in 0 until len) {
             val coin = world.coins[i]
-            val keyFrame = Assets.coinAnim!!.getKeyFrame(coin.stateTime, Animation.ANIMATION_LOOPING)
+            val keyFrame = assets.coinAnim.getKeyFrame(coin.stateTime, Animation.ANIMATION_LOOPING)
             batch.draw(keyFrame, coin.position.x - 0.5f, coin.position.y - 0.5f, 1f, 1f)
         }
     }
@@ -103,7 +103,7 @@ class WorldRenderer(internal var batch: SpriteBatch, internal var world: World) 
         val len = world.squirrels.size
         for (i in 0 until len) {
             val squirrel = world.squirrels[i]
-            val keyFrame = Assets.squirrelFly!!.getKeyFrame(squirrel.stateTime, Animation.ANIMATION_LOOPING)
+            val keyFrame = assets.squirrelFly.getKeyFrame(squirrel.stateTime, Animation.ANIMATION_LOOPING)
             val side = (if (squirrel.velocity.x < 0) -1 else 1).toFloat()
             if (side < 0)
                 batch.draw(keyFrame, squirrel.position.x + 0.5f, squirrel.position.y - 0.5f, side * 1, 1f)
@@ -115,7 +115,7 @@ class WorldRenderer(internal var batch: SpriteBatch, internal var world: World) 
     private fun renderCastle() {
         val castle = world.castle
         if (castle != null) {
-            batch.draw(Assets.castle, castle.position.x - 1, castle.position.y - 1, 2f, 2f)
+            batch.draw(assets.castle, castle.position.x - 1, castle.position.y - 1, 2f, 2f)
         }
     }
 

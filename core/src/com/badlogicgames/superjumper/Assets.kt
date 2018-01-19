@@ -23,53 +23,58 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 
-object Assets {
-    var background: Texture? = null
-    var backgroundRegion: TextureRegion? = null
+class Assets() {
 
-    var items: Texture? = null
-    var mainMenu: TextureRegion? = null
-    var pauseMenu: TextureRegion? = null
-    var ready: TextureRegion? = null
-    var gameOver: TextureRegion? = null
-    var highScoresRegion: TextureRegion? = null
-    var logo: TextureRegion? = null
-    var soundOn: TextureRegion? = null
-    var soundOff: TextureRegion? = null
-    var arrow: TextureRegion? = null
-    var pause: TextureRegion? = null
-    var spring: TextureRegion? = null
-    var castle: TextureRegion? = null
-    var coinAnim: Animation? = null
-    var bobJump: Animation? = null
-    var bobFall: Animation? = null
-    var bobHit: TextureRegion? = null
-    var squirrelFly: Animation? = null
-    var platform: TextureRegion? = null
-    var brakingPlatform: Animation? = null
-    var font: BitmapFont? = null
+    val backgroundRegion: TextureRegion
 
-    var music: Music? = null
-    var jumpSound: Sound? = null
-    var highJumpSound: Sound? = null
-    var hitSound: Sound? = null
-    var coinSound: Sound? = null
-    var clickSound: Sound? = null
+    val mainMenu: TextureRegion
+    val pauseMenu: TextureRegion
+    val ready: TextureRegion
+    val gameOver: TextureRegion
+    val highScoresRegion: TextureRegion
+    val logo: TextureRegion
+    val soundOn: TextureRegion
+    val soundOff: TextureRegion
+    val arrow: TextureRegion
+    val pause: TextureRegion
+    val spring: TextureRegion
+    val castle: TextureRegion
+    val coinAnim: Animation
+    val bobJump: Animation
+    val bobFall: Animation
+    val bobHit: TextureRegion
+    val squirrelFly: Animation
+    val platform: TextureRegion
+    val brakingPlatform: Animation
+    val font: BitmapFont
 
-    fun loadTexture(file: String): Texture {
-        return Texture(Gdx.files.internal(file))
+    val music: Music
+    val jumpSound: Sound
+    val highJumpSound: Sound
+    val hitSound: Sound
+    val coinSound: Sound
+    val clickSound: Sound
+
+    companion object {
+        fun playSound(sound: Sound) {
+            if (Settings.soundEnabled) sound.play(1f)
+        }
+
+        fun loadTexture(file: String): Texture {
+            return Texture(Gdx.files.internal(file))
+        }
     }
 
-    fun load() {
-        background = loadTexture("data/background.png")
+    init {
+        val background = loadTexture("data/background.png")
         backgroundRegion = TextureRegion(background, 0, 0, 320, 480)
 
-        items = loadTexture("data/items.png")
+        val items = loadTexture("data/items.png")
         mainMenu = TextureRegion(items, 0, 224, 300, 110)
         pauseMenu = TextureRegion(items, 224, 128, 192, 96)
         ready = TextureRegion(items, 320, 224, 192, 32)
         gameOver = TextureRegion(items, 352, 256, 160, 96)
-        highScoresRegion = TextureRegion(Assets.items, 0, 257, 300, 110 / 3)
+        highScoresRegion = TextureRegion(items, 0, 257, 300, 110 / 3)
         logo = TextureRegion(items, 0, 352, 274, 142)
         soundOff = TextureRegion(items, 0, 0, 64, 64)
         soundOn = TextureRegion(items, 64, 0, 64, 64)
@@ -91,7 +96,6 @@ object Assets {
         font = BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false)
 
         music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"))
-        val music = music!!
         music.isLooping = true
         music.volume = 0.5f
         if (Settings.soundEnabled) music.play()
@@ -100,9 +104,5 @@ object Assets {
         hitSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"))
         coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"))
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"))
-    }
-
-    fun playSound(sound: Sound) {
-        if (Settings.soundEnabled) sound.play(1f)
     }
 }

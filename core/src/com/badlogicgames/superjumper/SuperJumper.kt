@@ -23,10 +23,12 @@ class SuperJumper: Game() {
     // used by all screens
     lateinit var batcher: SpriteBatch
 
+    public var assets: Assets? = null
+
     override fun create() {
         batcher = SpriteBatch()
         Settings.load()
-        Assets.load()
+        this.assets = Assets()
         setScreen(MainMenuScreen(this))
     }
 

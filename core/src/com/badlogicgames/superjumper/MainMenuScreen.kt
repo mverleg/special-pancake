@@ -28,7 +28,6 @@ class MainMenuScreen(internal var game: SuperJumper): ScreenAdapter() {
     internal var soundBounds: Rectangle
     internal var playBounds: Rectangle
     internal var highscoresBounds: Rectangle
-    internal var helpBounds: Rectangle
     internal var touchPoint: Vector3
 
     init {
@@ -38,41 +37,41 @@ class MainMenuScreen(internal var game: SuperJumper): ScreenAdapter() {
         soundBounds = Rectangle(0f, 0f, 64f, 64f)
         playBounds = Rectangle((160 - 150).toFloat(), (200 + 18).toFloat(), 300f, 36f)
         highscoresBounds = Rectangle((160 - 150).toFloat(), (200 - 18).toFloat(), 300f, 36f)
-        helpBounds = Rectangle((160 - 150).toFloat(), (200 - 18 - 36).toFloat(), 300f, 36f)
         touchPoint = Vector3()
     }
 
     fun update() {
+
+        val assets = game.assets!!
+
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
 
             if (playBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
+                Assets.playSound(assets.clickSound)
                 game.screen = GameScreen(game)
                 return
             }
             if (highscoresBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
+                Assets.playSound(assets.clickSound)
                 game.screen = HighscoresScreen(game)
                 return
             }
-            if (helpBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
-                game.screen = HelpScreen(game)
-                return
-            }
             if (soundBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
+                Assets.playSound(assets.clickSound)
                 Settings.soundEnabled = !Settings.soundEnabled
                 if (Settings.soundEnabled)
-                    Assets.music!!.play()
+                    assets.music.play()
                 else
-                    Assets.music!!.pause()
+                    assets.music.pause()
             }
         }
     }
 
     fun draw() {
+
+        val assets = game.assets!!
+
         val gl = Gdx.gl
         gl.glClearColor(1f, 0f, 0f, 1f)
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -81,14 +80,14 @@ class MainMenuScreen(internal var game: SuperJumper): ScreenAdapter() {
 
         game.batcher.disableBlending()
         game.batcher.begin()
-        game.batcher.draw(Assets.backgroundRegion, 0f, 0f, 320f, 480f)
+        game.batcher.draw(assets.backgroundRegion, 0f, 0f, 320f, 480f)
         game.batcher.end()
 
         game.batcher.enableBlending()
         game.batcher.begin()
-        game.batcher.draw(Assets.logo, (160 - 274 / 2).toFloat(), (480 - 10 - 142).toFloat(), 274f, 142f)
-        game.batcher.draw(Assets.mainMenu, 10f, (200 - 110 / 2).toFloat(), 300f, 110f)
-        game.batcher.draw(if (Settings.soundEnabled) Assets.soundOn else Assets.soundOff, 0f, 0f, 64f, 64f)
+        game.batcher.draw(assets.logo, (160 - 274 / 2).toFloat(), (480 - 10 - 142).toFloat(), 274f, 142f)
+        game.batcher.draw(assets.mainMenu, 10f, (200 - 110 / 2).toFloat(), 300f, 110f)
+        game.batcher.draw(if (Settings.soundEnabled) assets.soundOn else assets.soundOff, 0f, 0f, 64f, 64f)
         game.batcher.end()
     }
 

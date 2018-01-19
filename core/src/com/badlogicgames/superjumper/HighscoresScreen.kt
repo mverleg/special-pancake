@@ -31,9 +31,9 @@ class HighscoresScreen(internal var game: SuperJumper): ScreenAdapter() {
     internal var highScores: Array<String?>
     internal var xOffset = 0f
     internal var glyphLayout = GlyphLayout()
+    internal val assets = game.assets!!
 
     init {
-
         guiCam = OrthographicCamera(320f, 480f)
         guiCam.position.set((320 / 2).toFloat(), (480 / 2).toFloat(), 0f)
         backBounds = Rectangle(0f, 0f, 64f, 64f)
@@ -41,10 +41,10 @@ class HighscoresScreen(internal var game: SuperJumper): ScreenAdapter() {
         highScores = arrayOfNulls(5)
         for (i in 0..4) {
             highScores[i] = (i + 1).toString() + ". " + Settings.highscores[i]
-            glyphLayout.setText(Assets.font, highScores[i])
+            glyphLayout.setText(assets.font, highScores[i])
             xOffset = Math.max(glyphLayout.width, xOffset)
         }
-        xOffset = 160 - xOffset / 2 + Assets.font!!.spaceWidth / 2
+        xOffset = 160 - xOffset / 2 + assets.font.spaceWidth / 2
     }
 
     fun update() {
@@ -52,7 +52,7 @@ class HighscoresScreen(internal var game: SuperJumper): ScreenAdapter() {
             guiCam.unproject(touchPoint.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
 
             if (backBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
+                Assets.playSound(assets.clickSound)
                 game.screen = MainMenuScreen(game)
                 return
             }
@@ -67,20 +67,20 @@ class HighscoresScreen(internal var game: SuperJumper): ScreenAdapter() {
         game.batcher.projectionMatrix = guiCam.combined
         game.batcher.disableBlending()
         game.batcher.begin()
-        game.batcher.draw(Assets.backgroundRegion, 0f, 0f, 320f, 480f)
+        game.batcher.draw(assets.backgroundRegion, 0f, 0f, 320f, 480f)
         game.batcher.end()
 
         game.batcher.enableBlending()
         game.batcher.begin()
-        game.batcher.draw(Assets.highScoresRegion, 10f, (360 - 16).toFloat(), 300f, 33f)
+        game.batcher.draw(assets.highScoresRegion, 10f, (360 - 16).toFloat(), 300f, 33f)
 
         var y = 230f
         for (i in 4 downTo 0) {
-            Assets.font!!.draw(game.batcher, highScores[i], xOffset, y)
-            y += Assets.font!!.lineHeight
+            assets.font.draw(game.batcher, highScores[i], xOffset, y)
+            y += assets.font.lineHeight
         }
 
-        game.batcher.draw(Assets.arrow, 0f, 0f, 64f, 64f)
+        game.batcher.draw(assets.arrow, 0f, 0f, 64f, 64f)
         game.batcher.end()
     }
 

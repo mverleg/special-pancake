@@ -10,13 +10,13 @@ import com.badlogic.gdx.utils.Align
 class WinScreen(internal var game: SuperJumper): ScreenAdapter() {
     internal var cam: OrthographicCamera
     internal var princess: TextureRegion
-    internal var messages = arrayOf("Princess: Oh dear!\n What have you done?", "Bob: I came to \nrescue you!", "Princess: you are\n mistaken\nI need no rescueing", "Bob: So all this \nwork for nothing?", "Princess: I have \ncake and tea!\nWould you like some?", "Bob: I'd be my \npleasure!", "And they ate cake\nand drank tea\nhappily ever \nafter\n\n\n\n\n\n\nKära Emma!\nDu är fantastisk!\nDu blev ferdig\n med spelet!")
+    internal var messages = arrayOf("Princess: Oh dear!\n What have you done?", "Bob: I came to \nrescue you!", "Princess: you are\n mistaken\nI need no rescueing", "Bob: So all this \nwork for nothing?", "Princess: I have \ncake and tea!\nWould you like some?", "Bob: I'd be my \npleasure!", "And they ate cake\nand drank tea\nhappily ever \nafter")
     internal var currentMessage = 0
 
     init {
         cam = OrthographicCamera()
         cam.setToOrtho(false, 320f, 480f)
-        princess = TextureRegion(Assets.arrow!!.texture, 210, 122, -40, 38)
+        princess = TextureRegion(game.assets!!.arrow.texture, 210, 122, -40, 38)
     }
 
     override fun render(delta: Float) {
@@ -32,10 +32,11 @@ class WinScreen(internal var game: SuperJumper): ScreenAdapter() {
         cam.update()
         game.batcher.projectionMatrix = cam.combined
         game.batcher.begin()
-        game.batcher.draw(Assets.backgroundRegion, 0f, 0f)
-        game.batcher.draw(Assets.castle, 60f, 120f, 200f, 200f)
-        game.batcher.draw(Assets.bobFall!!.getKeyFrame(0f, Animation.ANIMATION_LOOPING), 120f, 200f)
-        Assets.font!!.draw(game.batcher, messages[currentMessage], 0f, 400f, 320f, Align.center, false)
+        val assets = game.assets!!
+        game.batcher.draw(assets.backgroundRegion, 0f, 0f)
+        game.batcher.draw(assets.castle, 60f, 120f, 200f, 200f)
+        game.batcher.draw(assets.bobFall.getKeyFrame(0f, Animation.ANIMATION_LOOPING), 120f, 200f)
+        assets.font.draw(game.batcher, messages[currentMessage], 0f, 400f, 320f, Align.center, false)
         game.batcher.draw(princess, 150f, 200f)
         game.batcher.end()
     }

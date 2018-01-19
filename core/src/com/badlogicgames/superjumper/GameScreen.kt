@@ -40,34 +40,34 @@ class GameScreen(internal var game: SuperJumper): ScreenAdapter() {
     internal var quitBounds: Rectangle
     internal var lastScore: Int = 0
     internal var scoreString: String
+    internal val assets = game.assets!!
 
     internal var glyphLayout = GlyphLayout()
 
     init {
-
         state = GAME_READY
         guiCam = OrthographicCamera(320f, 480f)
         guiCam.position.set((320 / 2).toFloat(), (480 / 2).toFloat(), 0f)
         touchPoint = Vector3()
         worldListener = object: WorldListener {
             override fun jump() {
-                Assets.playSound(Assets.jumpSound!!)
+                Assets.playSound(assets.jumpSound)
             }
 
             override fun highJump() {
-                Assets.playSound(Assets.highJumpSound!!)
+                Assets.playSound(assets.highJumpSound)
             }
 
             override fun hit() {
-                Assets.playSound(Assets.hitSound!!)
+                Assets.playSound(assets.hitSound)
             }
 
             override fun coin() {
-                Assets.playSound(Assets.coinSound!!)
+                Assets.playSound(assets.coinSound)
             }
         }
         world = World(worldListener)
-        renderer = WorldRenderer(game.batcher, world)
+        renderer = WorldRenderer(game.batcher, world, assets)
         pauseBounds = Rectangle((320 - 64).toFloat(), (480 - 64).toFloat(), 64f, 64f)
         resumeBounds = Rectangle((160 - 96).toFloat(), 240f, 192f, 36f)
         quitBounds = Rectangle((160 - 96).toFloat(), (240 - 36).toFloat(), 192f, 36f)
@@ -99,7 +99,7 @@ class GameScreen(internal var game: SuperJumper): ScreenAdapter() {
             guiCam.unproject(touchPoint.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
 
             if (pauseBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
+                Assets.playSound(assets.clickSound)
                 state = GAME_PAUSED
                 return
             }
@@ -139,13 +139,13 @@ class GameScreen(internal var game: SuperJumper): ScreenAdapter() {
             guiCam.unproject(touchPoint.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
 
             if (resumeBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
+                Assets.playSound(assets.clickSound)
                 state = GAME_RUNNING
                 return
             }
 
             if (quitBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound!!)
+                Assets.playSound(assets.clickSound)
                 game.screen = MainMenuScreen(game)
                 return
             }
@@ -155,7 +155,7 @@ class GameScreen(internal var game: SuperJumper): ScreenAdapter() {
     private fun updateLevelEnd() {
         if (Gdx.input.justTouched()) {
             world = World(worldListener)
-            renderer = WorldRenderer(game.batcher, world)
+            renderer = WorldRenderer(game.batcher, world, assets)
             world.score = lastScore
             state = GAME_READY
         }
@@ -188,30 +188,30 @@ class GameScreen(internal var game: SuperJumper): ScreenAdapter() {
     }
 
     private fun presentReady() {
-        game.batcher.draw(Assets.ready, (160 - 192 / 2).toFloat(), (240 - 32 / 2).toFloat(), 192f, 32f)
+        game.batcher.draw(assets.ready, (160 - 192 / 2).toFloat(), (240 - 32 / 2).toFloat(), 192f, 32f)
     }
 
     private fun presentRunning() {
-        game.batcher.draw(Assets.pause, (320 - 64).toFloat(), (480 - 64).toFloat(), 64f, 64f)
-        Assets.font!!.draw(game.batcher, scoreString, 16f, (480 - 20).toFloat())
+        game.batcher.draw(assets.pause, (320 - 64).toFloat(), (480 - 64).toFloat(), 64f, 64f)
+        assets.font.draw(game.batcher, scoreString, 16f, (480 - 20).toFloat())
     }
 
     private fun presentPaused() {
-        game.batcher.draw(Assets.pauseMenu, (160 - 192 / 2).toFloat(), (240 - 96 / 2).toFloat(), 192f, 96f)
-        Assets.font!!.draw(game.batcher, scoreString, 16f, (480 - 20).toFloat())
+        game.batcher.draw(assets.pauseMenu, (160 - 192 / 2).toFloat(), (240 - 96 / 2).toFloat(), 192f, 96f)
+        assets.font.draw(game.batcher, scoreString, 16f, (480 - 20).toFloat())
     }
 
     private fun presentLevelEnd() {
-        glyphLayout.setText(Assets.font, "the princess is ...")
-        Assets.font!!.draw(game.batcher, glyphLayout, 160 - glyphLayout.width / 2, (480 - 40).toFloat())
-        glyphLayout.setText(Assets.font, "in another castle!")
-        Assets.font!!.draw(game.batcher, glyphLayout, 160 - glyphLayout.width / 2, 40f)
+        glyphLayout.setText(assets.font, "the princess is ...")
+        assets.font.draw(game.batcher, glyphLayout, 160 - glyphLayout.width / 2, (480 - 40).toFloat())
+        glyphLayout.setText(assets.font, "in another castle!")
+        assets.font.draw(game.batcher, glyphLayout, 160 - glyphLayout.width / 2, 40f)
     }
 
     private fun presentGameOver() {
-        game.batcher.draw(Assets.gameOver, (160 - 160 / 2).toFloat(), (240 - 96 / 2).toFloat(), 160f, 96f)
-        glyphLayout.setText(Assets.font, scoreString)
-        Assets.font!!.draw(game.batcher, scoreString, 160 - glyphLayout.width / 2, (480 - 20).toFloat())
+        game.batcher.draw(assets.gameOver, (160 - 160 / 2).toFloat(), (240 - 96 / 2).toFloat(), 160f, 96f)
+        glyphLayout.setText(assets.font, scoreString)
+        assets.font.draw(game.batcher, scoreString, 160 - glyphLayout.width / 2, (480 - 20).toFloat())
     }
 
     override fun render(delta: Float) {
